@@ -26,7 +26,7 @@ describe ActiveRecord::Acts::ShoppingCart::Collection do
       end
 
       it "creates a new shopping cart item" do
-        subject.shopping_cart_items.should_receive(:create).with(:item => object, :price => Money.new(1999, Money.default_currency), :quantity => 3)
+        subject.shopping_cart_items.should_receive(:create).with(:item => object, :price_cents => 1999, :quantity => 3, :price_currency => Money.default_currency.to_str)
         subject.add(object, 19.99, 3)
       end
     end
@@ -37,7 +37,7 @@ describe ActiveRecord::Acts::ShoppingCart::Collection do
       end
 
       it "creates a new shopping cart item non-cumulatively" do
-        subject.shopping_cart_items.should_receive(:create).with(:item => object, :price => Money.new(1999, Money.default_currency), :quantity => 3)
+        subject.shopping_cart_items.should_receive(:create).with(:item => object, :price_cents => 1999, :quantity => 3, :price_currency => Money.default_currency.to_str)
         subject.add(object, 19.99, 3, false)
       end
     end
