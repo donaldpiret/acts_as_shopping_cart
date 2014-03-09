@@ -9,7 +9,7 @@ module ActsAsShoppingCart
       integer :item_id    # Holds the object id
       string  :item_type  # Holds the type of the object, for polymorphism
       integer :price_cents      # Holds the price of the item
-      integer :price_currency
+      string  :price_currency
     end
   end
 end
