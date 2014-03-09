@@ -6,6 +6,7 @@ module ActiveRecord
         # Adds a product to the cart
         #
         def add(object, price, quantity = 1, cumulative = true)
+          price = Money.new((price * 100).ceil, Money.default_currency) unless price.is_a?(Money)
           cart_item = item_for(object)
 
           unless cart_item
@@ -49,11 +50,11 @@ module ActiveRecord
         # Returns the subtotal by summing the price times quantity for all the items in the cart
         #
         def subtotal
-          ("%.2f" % shopping_cart_items.inject(0) { |sum, item| sum += (item.price * item.quantity) }).to_f
+          shopping_cart_items.inject(Money.new(0, Money.default_currency)) { |sum, item| sum += (item.price * item.quantity)}
         end
 
         def shipping_cost
-          0
+          Money.new(0, Money.default_currency)
         end
 
         def taxes
@@ -68,7 +69,7 @@ module ActiveRecord
         # Returns the total by summing the subtotal, taxes and shipping_cost
         #
         def total
-          ("%.2f" % (self.subtotal + self.taxes + self.shipping_cost)).to_f
+          self.subtotal + self.taxes + self.shipping_cost
         end
 
         #

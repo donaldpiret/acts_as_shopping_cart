@@ -26,7 +26,7 @@ describe ActiveRecord::Acts::ShoppingCart::Collection do
       end
 
       it "creates a new shopping cart item" do
-        subject.shopping_cart_items.should_receive(:create).with(:item => object, :price => 19.99, :quantity => 3)
+        subject.shopping_cart_items.should_receive(:create).with(:item => object, :price => Money.new(1999, Money.default_currency), :quantity => 3)
         subject.add(object, 19.99, 3)
       end
     end
@@ -37,7 +37,7 @@ describe ActiveRecord::Acts::ShoppingCart::Collection do
       end
 
       it "creates a new shopping cart item non-cumulatively" do
-        subject.shopping_cart_items.should_receive(:create).with(:item => object, :price => 19.99, :quantity => 3)
+        subject.shopping_cart_items.should_receive(:create).with(:item => object, :price => Money.new(1999, Money.default_currency), :quantity => 3)
         subject.add(object, 19.99, 3, false)
       end
     end
@@ -139,12 +139,12 @@ describe ActiveRecord::Acts::ShoppingCart::Collection do
 
     context "cart has items" do
       before do
-        items = [stub(:quantity => 2, :price => 33.99), stub(:quantity => 1, :price => 45.99)]
+        items = [stub(:quantity => 2, :price => Money.new(3399, Money.default_currency)), stub(:quantity => 1, :price => Money.new(4599, Money.default_currency))]
         subject.stub(:shopping_cart_items).and_return(items)
       end
 
       it "returns the sum of the price * quantity for all items" do
-        subject.subtotal.should eq(113.97)
+        subject.subtotal.should eq(Money.new(11397, Money.default_currency))
       end
     end
   end

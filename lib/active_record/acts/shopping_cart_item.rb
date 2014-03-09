@@ -2,7 +2,7 @@ module ActiveRecord
   module Acts
     module ShoppingCartItem
       def self.included(base)
-        base.extend(ClassMethods)
+        base.extend(ClassMethods)        
       end
 
       module ClassMethods
@@ -20,6 +20,7 @@ module ActiveRecord
           self.send :include, ActiveRecord::Acts::ShoppingCartItem::InstanceMethods
           belongs_to :owner, :polymorphic => true
           belongs_to :item, :polymorphic => true
+          monetize :price_cents, with_model_currency: :price_currency
         end
 
         #

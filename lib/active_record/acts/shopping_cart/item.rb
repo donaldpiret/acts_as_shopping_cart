@@ -16,7 +16,7 @@ module ActiveRecord
         #
         def subtotal_for(object)
           item = item_for(object)
-          item ? item.subtotal : 0
+          item ? item.subtotal : Money.new(0, Money.default_currency)
         end
 
         #
@@ -40,13 +40,14 @@ module ActiveRecord
         #
         def price_for(object)
           item = item_for(object)
-          item ? item.price : 0
+          item ? item.price : Money.new(0, Money.default_currency)
         end
 
         #
         # Updates the price of the specified object
         #
         def update_price_for(object, new_price)
+          new_price = Money.new((new_price * 100).to_i, Money.default_currency) unless new_price.is_a?(Money)
           item = item_for(object)
           item.update_price(new_price) if item
         end
